@@ -6,14 +6,25 @@ import { Typography } from '@mui/material';
 interface OwnProps extends ButtonProps {
   text: string;
   icon?: React.ReactElement;
+  className?: string;
   onClick?: () => void;
 }
 
-const CustomButton: React.FC<OwnProps> = ({ text, icon, onClick, ...rest }) => {
-  const { classes } = useStyles();
+const CustomButton: React.FC<OwnProps> = ({
+  text,
+  icon,
+  onClick,
+  className,
+  ...rest
+}) => {
+  const { classes, cx } = useStyles();
 
   return (
-    <Button {...rest} className={classes.button} onClick={onClick}>
+    <Button
+      {...rest}
+      className={cx(classes.button, className)}
+      onClick={onClick}
+    >
       <Typography variant="text" className={classes.buttonText}>
         {text}
       </Typography>
@@ -32,11 +43,12 @@ const useStyles = makeStyles()((theme) => ({
     border: `2px solid ${theme.palette.primary.main}`,
     borderRadius: 8,
     textAlign: 'center',
-    minWidth: 273,
-
     '&:hover': {
       background: theme.palette.common.white,
       color: theme.palette.primary.main,
+    },
+    [theme.breakpoints.up('lg')]: {
+      minWidth: 273,
     },
   },
   buttonText: {
